@@ -1,0 +1,139 @@
+{
+    "application_name": "cafqa_optimization_HeH_Distance: 0.75 Energy Level: 1",
+    "optimization_objectives": [
+        "value"
+    ],
+    "design_of_experiment": {
+        "number_of_samples": 500
+    },
+    "optimization_iterations": 500,
+    "models": {
+        "model": "random_forest"
+    },
+    "input_parameters": {
+        "x0": {
+            "parameter_type": "ordinal",
+            "values": [
+                0,
+                1,
+                2,
+                3
+            ],
+            "parameter_default": 0
+        },
+        "x1": {
+            "parameter_type": "ordinal",
+            "values": [
+                0,
+                1,
+                2,
+                3
+            ],
+            "parameter_default": 0
+        },
+        "x2": {
+            "parameter_type": "ordinal",
+            "values": [
+                0,
+                1,
+                2,
+                3
+            ],
+            "parameter_default": 0
+        },
+        "x3": {
+            "parameter_type": "ordinal",
+            "values": [
+                0,
+                1,
+                2,
+                3
+            ],
+            "parameter_default": 0
+        },
+        "x4": {
+            "parameter_type": "ordinal",
+            "values": [
+                0,
+                1,
+                2,
+                3
+            ],
+            "parameter_default": 0
+        },
+        "x5": {
+            "parameter_type": "ordinal",
+            "values": [
+                0,
+                1,
+                2,
+                3
+            ],
+            "parameter_default": 0
+        },
+        "x6": {
+            "parameter_type": "ordinal",
+            "values": [
+                0,
+                1,
+                2,
+                3
+            ],
+            "parameter_default": 0
+        },
+        "x7": {
+            "parameter_type": "ordinal",
+            "values": [
+                0,
+                1,
+                2,
+                3
+            ],
+            "parameter_default": 0
+        },
+        "x8": {
+            "parameter_type": "ordinal",
+            "values": [
+                0,
+                1,
+                2,
+                3
+            ],
+            "parameter_default": 0
+        },
+        "x9": {
+            "parameter_type": "ordinal",
+            "values": [
+                0,
+                1,
+                2,
+                3
+            ],
+            "parameter_default": 0
+        },
+        "x10": {
+            "parameter_type": "ordinal",
+            "values": [
+                0,
+                1,
+                2,
+                3
+            ],
+            "parameter_default": 0
+        },
+        "x11": {
+            "parameter_type": "ordinal",
+            "values": [
+                0,
+                1,
+                2,
+                3
+            ],
+            "parameter_default": 0
+        }
+    },
+    "print_best": true,
+    "print_posterior_best": true,
+    "log_file": "HeH_Distance_0.75/HeH_Distance: 0.75 Energy Level: 1_hypermapper_log.log",
+    "output_data_file": "HeH_Distance_0.75/HeH_Distance: 0.75 Energy Level: 1_hypermapper_output.csv"
+}

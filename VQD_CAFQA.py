@@ -1,7 +1,4 @@
-from __future__ import print_function
 import numpy as np
-
-
 from qiskit_nature.units import DistanceUnit
 from qiskit_nature.second_q.circuit.library import HartreeFock
 from qiskit_nature.second_q.transformers import ActiveSpaceTransformer
@@ -188,6 +185,7 @@ def vqd_genetic_cafqa_stim(inputs, coeffs, paulis,ansatz,betas,paramList,ansatzL
         with open(params_filename, 'a') as file:
             writer = csv.writer(file)
             writer.writerow(parameters)
+   
     return loss
 
 
@@ -205,9 +203,16 @@ def CliffordGeneticOptimizer(func,
                              mutation_type = "random", 
                              mutation_probability = 0.01,
                              keep_elitism=1,
-                            parallel = 4):
+                            parallel = 4,
+                            initial_state  = None):
     def fitness_func(ga_instance, solution, solution_idx):
         return -1*func(solution)
+    
+    initial_pop = None
+    if(initial_state is not None):
+        initial_pop = [initial_state for i in range(sol_per_pop)]
+    
+    
     
     ga_instance = pygad.GA(num_generations=budget,
                                 num_parents_mating=num_parents_mating,
@@ -222,7 +227,9 @@ def CliffordGeneticOptimizer(func,
                                 crossover_probability=crossover_probability,
                                 mutation_probability=mutation_probability,
                                 keep_elitism=keep_elitism,
-                                parallel_processing=parallel
+                                parallel_processing=parallel,
+                           initial_population=initial_pop,
+
                               )
     ga_instance.run()
     
@@ -240,7 +247,8 @@ def run_genetic_cafqa_vqe(coeffs,paulis,ansatz,save_dir=None,name=None,
                          mutation_type = "random", 
                          mutation_probability = 0.01,
                          keep_elitism=1,
-                         parallel=4):
+                         parallel=4,
+                         initial_state = None):
     
     if(save_dir is not None and name is not None):
         loss_path =  save_dir + "/"+name+"_loss.txt"
@@ -251,8 +259,9 @@ def run_genetic_cafqa_vqe(coeffs,paulis,ansatz,save_dir=None,name=None,
         params_path = None
         log_path = None
     
-
-    e,state=CliffordGeneticOptimizer(lambda x: vqe_genetic_cafqa_stim(x, coeffs, paulis,ansatz, loss_filename=loss_path, params_filename=params_path, log_filename  = log_path),
+    def f(x):
+        return vqe_genetic_cafqa_stim(x, coeffs, paulis,ansatz, loss_filename=loss_path, params_filename=params_path, log_filename  = log_path)
+    e,state=CliffordGeneticOptimizer(f,
                              ansatz.num_parameters,
                              budget=budget,
                              num_parents_mating = num_parents_mating, 
@@ -264,7 +273,8 @@ def run_genetic_cafqa_vqe(coeffs,paulis,ansatz,save_dir=None,name=None,
                              mutation_type = mutation_type, 
                              mutation_probability = mutation_probability,
                              keep_elitism=keep_elitism,
-                            parallel=parallel)
+                            parallel=parallel,
+                             initial_state=initial_state)
     return np.array(state) * np.pi/2, e
 
 def run_genetic_cafqa_vqd(coeffs,paulis,ansatzList,k,save_dir=None,name=None,
@@ -278,8 +288,12 @@ def run_genetic_cafqa_vqd(coeffs,paulis,ansatzList,k,save_dir=None,name=None,
                          mutation_type = "random", 
                          mutation_probability = 0.01,
                          keep_elitism=1,
-                         parallel=4):
-    
+                         parallel=4,
+                         initial_states=None):
+    if(initial_states == None):
+        init = [None] *k 
+    else:
+        init = initial_states
     beta = np.sum(np.abs(coeffs))*2
     energies=[]
     betas=[]
@@ -312,7 +326,8 @@ def run_genetic_cafqa_vqd(coeffs,paulis,ansatzList,k,save_dir=None,name=None,
                              mutation_type = mutation_type, 
                              mutation_probability = mutation_probability,
                              keep_elitism=keep_elitism,
-                            parallel=parallel)
+                            parallel=parallel,
+                            initial_state = init[i])
         loss=vqe_genetic_cafqa_stim(inputs=state, coeffs=coeffs, paulis=paulis,ansatz=ansatzList[i])
         energies.append(loss)
         ansatz_list.append(ansatzList[i])
